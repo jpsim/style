@@ -197,6 +197,21 @@ There is typically no reason to hard-wrap lines, even though Objective-C tends t
 
 If you feel the need to wrap a method line, either the signature or an invocation, you may do so but make sure the parameter colons line up properly (Xcode will try its best to do this for you), but generally this isn't necessary.
 
+###Closing Brackets
+
+When there's a closing bracket, do not include an extra line between the last line of code and the bracket.
+    
+	if (goodExample) {
+		//do something
+		return 0;
+	} // good
+
+	if (badExample) {
+		//do something
+		return -1;
+
+	} //bad!
+
 ### Control Structures
 
 Control structures (i.e. `if`, `for`, `while`, etc.) all require one space between the keyword and the open paren, and one space between the closing paren and the opening brace. There should be no padding spaces inside the parens before the actual condition.
@@ -221,9 +236,8 @@ When comparing a variable for equality against `nil` or some constant, always be
 
 ## Project Conventions
 
-### Keep public API simple
-
-The Public API is what's exposed in your header files. These headers should only include the very minimal set of methods which can be used by outside classes. Any internal methods which won't either be invoked by outside classes, overridden by sublcasses, or exposed to unit tests, should not be put in the `.h` file. This includes `@property` declarations. Public properties belong in the headers, but private ones should be declared in the **class extension**.
+###Keep public API Simple, but testable.
+The Public API is what's exposed in your header files. These header files should be split up into two seperate files. Public methods should be included in the .h file of the class. Internal methods which won't either be invoked by outside classes, or overidden by subclasses, should be included in a seperate .h file, and then be imported into the .m file. This may seem odd, but it allows testers to access the methods to verify the correctness of the methods, while keeping the private methods private from the public. This includes `@property` declarations. Public properties belong in the headers, but private ones should be declared in the private .h file.
 
 This also means header files should not contain instance variable declarations, as they are really an implementation detail.
 
@@ -263,6 +277,8 @@ When necessary, comments should be of the form `// Comment here` directly above 
     if (!self.refreshControl.isRefreshing) {
         [[APIClient sharedClient] getMessagesWithSuccess:nil failure:nil];
     }
+
+As a general rule, if you believe your method requires comments to explain the steps of the process, it's probably doing too much, and should be refactored.
 
 ### Being a good Cocoa citizen
 
